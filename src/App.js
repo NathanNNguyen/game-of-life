@@ -29,9 +29,7 @@ function App() {
     return generateEmptyGrid()
   })
   const [running, setRunning] = useState(false)
-  // console.log(grid)
   const [speed, setSpeed] = useState(1000)
-  console.log(speed)
   const [generation, setGeneration] = useState(0)
 
   const runningRef = useRef(running)
@@ -39,6 +37,9 @@ function App() {
 
   const speedRef = useRef(speed)
   speedRef.current = speed
+
+  const generationRef = useRef(generation)
+  generationRef.current = generation
 
   if (speed < 0) {
     setSpeed(0)
@@ -73,9 +74,9 @@ function App() {
         }
       })
     })
-
+    setGeneration(generationRef.current + 1)
     setTimeout(runSimulation, speedRef.current)
-  }, [])
+  }, [generationRef])
 
   return (
     <>
@@ -88,7 +89,6 @@ function App() {
               if (!running) {
                 runningRef.current = true
                 runSimulation()
-                // play()
               }
             }}
           >
@@ -136,7 +136,7 @@ function App() {
             ))}
         </div>
         <div>
-          <h4>Current speed: {speed}</h4>
+          <h4>Current speed: {speed}ms</h4>
           <h4>Generation: {generation}</h4>
         </div>
       </div>
