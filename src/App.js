@@ -32,6 +32,8 @@ function App() {
   const [speed, setSpeed] = useState(1000)
   const [generation, setGeneration] = useState(0)
 
+  const [theme, setTheme] = useState(false)
+
   const runningRef = useRef(running)
   runningRef.current = running
 
@@ -94,8 +96,12 @@ function App() {
           >
             {running ? 'Stop' : 'Start'}
           </button>
-          <button onClick={() => setGrid(generateEmptyGrid())}>
-            Clear
+          <button onClick={() => {
+            setGrid(generateEmptyGrid())
+            setGeneration(0)
+            setSpeed(1000)
+          }}>
+            Reset
           </button>
           <button onClick={() => {
             const rows = []
@@ -108,13 +114,16 @@ function App() {
             Random
           </button>
           <button onClick={() => setSpeed(speed + 100)}>
-            Speed +
-          </button>
-          <button onClick={() => setSpeed(speed - 100)}>
             Speed -
           </button>
+          <button onClick={() => setSpeed(speed - 100)}>
+            Speed +
+          </button>
+          <button onClick={() => setTheme(!theme)}>
+            Switch
+          </button>
         </div>
-        <div style={{
+        {!theme ? <div style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${numCols}, 20px)`
         }}>
@@ -130,13 +139,34 @@ function App() {
               style={{
                 width: 20,
                 height: 20,
-                backgroundColor: grid[i][k] ? 'gray' : undefined,
-                border: 'solid .5px black'
+                backgroundColor: grid[i][k] ? 'royalblue' : undefined,
+                border: 'solid .5px lightgray'
               }} />
             ))}
-        </div>
+        </div> :
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${numCols}, 20px)`
+          }}>
+            {grid.map((rows, i) =>
+              rows.map((col, k) => <div
+                key={`${i}_${k}`}
+                onClick={() => {
+                  const newGrid = produce(grid, copy => {
+                    copy[i][k] = grid[i][k] ? 0 : 1
+                  })
+                  setGrid(newGrid)
+                }}
+                style={{
+                  width: 20,
+                  height: 20,
+                  backgroundColor: grid[i][k] ? 'red' : undefined,
+                  border: 'solid .5px lightgray'
+                }} />
+              ))}
+          </div>}
         <div>
-          <h4>Current speed: {speed}ms</h4>
+          {!speed ? <h4>Max Speed: {speed}ms</h4> : <h4>Current Speed: {speed}ms</h4>}
           <h4>Generation: {generation}</h4>
         </div>
       </div>

@@ -1,3 +1,7 @@
+body {
+  background: black
+}
+
 .center {
   margin: auto;
   display: table;
@@ -5,7 +9,7 @@
 }
 
 h1, h2, h3, h4 {
-  color: black;
+  color: white;
   margin: auto;
   text-align: center;
   width: 50%;
